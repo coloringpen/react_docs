@@ -1,63 +1,40 @@
+import React from 'react';
 import './App.css';
 
-function formatDate(date) {
-  return date.toLocaleDateString();
-}
-
-const comment = {
-  date: new Date(),
-  text: 'I hope you enjoy learning React!',
-  author: {
-    name: 'Hello Kitty',
-    avatarUrl: 'http://placekitten.com/g/64/64',
-  },
-};
-
-function Avatar(props) {
-  return (
-    <img className="Avatar" src={props.user.avatarUrl} alt={props.user.name} />
-  );
-}
-
-function UserName(props) {
-  return <div className="UserInfo-name">{props.user.name}</div>;
-}
-
-function UserInfo(props) {
-  return (
-    <div className="userInfo">
-      <Avatar user={props.user} />
-      <UserName user={props.user} />
-    </div>
-  );
-}
-
-function Text(props) {
-  return <div className="Comment-text">{props.text}</div>;
-}
-
-function Date(props) {
-  return <div className='"Comment-date'>{formatDate(props.date)}</div>;
-}
-
-function Comment(props) {
-  return (
-    <div className="Comment">
-      <UserInfo user={props.author} />
-      <Text text={props.text} />
-      <Date date={props.date} />
-    </div>
-  );
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: new Date(),
+    };
+  }
+  componentDidMount() {
+    this.timerID = setInterval(() => this.tick(), 1000);
+    // clearInterval을 쓸 수 있게 변수로 저장한 것일뿐 함수 실행되는 건
+    // 변수 저장 안하는 거랑 똑같음
+  }
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+  tick() {
+    this.setState({
+      date: new Date(),
+    });
+  }
+  render() {
+    return (
+      <>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+      </>
+    );
+  }
 }
 
 function App() {
   return (
     <div>
-      <Comment
-        date={comment.date}
-        text={comment.text}
-        author={comment.author}
-      />
+      <Clock />
     </div>
   );
 }
